@@ -5,14 +5,14 @@ Lets the clinic team pick leaflets for a patient and hand them over as a QR code
 - **clinic.html** is the page the consultant uses. Tick the leaflets, press *Generate QR code*, and the patient scans it.
 - **index.html** is the page the patient sees. It shows their chosen leaflets plus the NHS Lothian pain relief and types of birth pages, and Labour Pains.
 - **leaflets.js** holds the list of leaflets. This is the only file you need to edit.
-- **leaflets/** holds the local PDF leaflets.
+- The PDF leaflets and the logo sit in the main folder next to the pages.
 - **qrcode.js** is the QR code library (MIT licence). It's bundled so the site works even where clinic PCs block external scripts.
 
 ## Privacy
 The link only contains leaflet codes (e.g. `index.html?l=vbac,epi`). No patient information is entered, stored or sent.
 
 ## Adding a leaflet
-1. Put the PDF in the `leaflets/` folder (use a simple file name, no spaces).
+1. Upload the PDF to the main folder (use a simple file name, no spaces).
 2. Add a line to `leaflets.js` with a new short `id`, then the title, category, source and file path.
 3. For leaflets hosted elsewhere, use `url:` with the web address instead of `file:`.
 4. Optionally add `review: "Mon YYYY"`. Staff see it on the clinic page, but patients don't.
@@ -29,5 +29,5 @@ The clinic page isn't password-protected. That's fine, because it holds nothing 
 
 ## Adding logos
 1. Get the approved logo files, e.g. the NHS Lothian logo from NHS Lothian Communications. Only use the official files.
-2. Put them in the `img/` folder.
-3. In `leaflets.js`, set `logo: "img/your-file.png"` for the header logo. For the emblems on each leaflet row, set `logo` under `sources`. Any source without a logo keeps its coloured text badge.
+2. Upload them to the main folder.
+3. In `leaflets.js`, set `logo: "your-file.png"` for the header logo. For the emblems on each leaflet row, set `logo` under `sources`. Any source without a logo keeps its coloured text badge.

@@ -21,8 +21,8 @@ window.LEAFLET_CONFIG = {
   clinicName: "Obstetric Anaesthetic Clinic",
 
   // Header logo shown on both pages. Put the official file in the /img folder and add its path,
-  // e.g. "img/nhs-lothian-logo.png". Leave as "" for no logo.
-  logo: "img/nhs-lothian-logo.png",
+  // e.g. "nhs-lothian-logo.png". Leave as "" for no logo.
+  logo: "nhs-lothian-logo.png",
 
   // Source badges shown on the right of each leaflet on the clinic page.
   // style "a" = blue, "b" = purple. To show an official emblem instead of the text badge,
@@ -64,41 +64,41 @@ window.LEAFLET_CONFIG = {
   leaflets: [
     // Pain relief in labour
     { id: "epi",   title: "Epidural pain relief in labour",           desc: "What an epidural is, how it's put in, and what to expect afterwards.",
-      category: "Pain relief in labour", source: "NHS Lothian", file: "leaflets/epidural-pain-relief.pdf" },
+      category: "Pain relief in labour", source: "NHS Lothian", file: "epidural-pain-relief.pdf" },
     { id: "epir",  title: "Epidurals: risks and side effects",       desc: "A picture guide to how common the side effects and risks of an epidural are.",
-      category: "Pain relief in labour", source: "OAA / RCoA",  file: "leaflets/epidural-risks-side-effects.pdf" },
+      category: "Pain relief in labour", source: "OAA / RCoA",  file: "epidural-risks-side-effects.pdf" },
     { id: "mob",   title: "Moving around with an epidural",          desc: "How a mobile epidural lets you stay upright and move during labour.",
-      category: "Pain relief in labour", source: "NHS Lothian", file: "leaflets/mobilising-with-epidural.pdf", review: "Nov 2026" },
+      category: "Pain relief in labour", source: "NHS Lothian", file: "mobilising-with-epidural.pdf", review: "Nov 2026" },
     { id: "remi",  title: "Remifentanil PCA pain relief for labour", desc: "A drip-based pain relief you control with a button, often used if an epidural isn't suitable.",
-      category: "Pain relief in labour", source: "NHS Lothian", file: "leaflets/remifentanil-pca.pdf" },
+      category: "Pain relief in labour", source: "NHS Lothian", file: "remifentanil-pca.pdf" },
 
     // Anaesthesia for caesarean birth
     { id: "spin",  title: "Spinal anaesthetics: risks and side effects", desc: "A picture guide to the spinal anaesthetic used for most caesarean births.",
-      category: "Anaesthesia for caesarean birth", source: "OAA / RCoA", file: "leaflets/spinal-risks-side-effects.pdf" },
+      category: "Anaesthesia for caesarean birth", source: "OAA / RCoA", file: "spinal-risks-side-effects.pdf" },
     { id: "ga",    title: "General anaesthetic for caesarean birth", desc: "Why a general anaesthetic is sometimes needed and what happens.",
-      category: "Anaesthesia for caesarean birth", source: "OAA", file: "leaflets/general-anaesthetic-caesarean-oaa.pdf" },
+      category: "Anaesthesia for caesarean birth", source: "OAA", file: "general-anaesthetic-caesarean-oaa.pdf" },
     { id: "gal",   title: "General anaesthetic for caesarean birth", desc: "Why a general anaesthetic is sometimes needed and what happens, at NHS Lothian.",
-      category: "Anaesthesia for caesarean birth", source: "NHS Lothian", file: "leaflets/general-anaesthetic-caesarean-nhsl.pdf", review: "Oct 2029" },
+      category: "Anaesthesia for caesarean birth", source: "NHS Lothian", file: "general-anaesthetic-caesarean-nhsl.pdf", review: "Oct 2029" },
     { id: "risk",  title: "Risks of anaesthesia explained",          desc: "How likely the risks of epidurals, spinals and general anaesthetics are, compared with everyday risks.",
-      category: "Anaesthesia for caesarean birth", source: "OAA", file: "leaflets/risks-of-anaesthesia-explained.pdf" },
+      category: "Anaesthesia for caesarean birth", source: "OAA", file: "risks-of-anaesthesia-explained.pdf" },
 
     // Your health in pregnancy
     { id: "bmi",   title: "Body mass index (BMI) and pregnancy",     desc: "Why you may be offered an anaesthetic appointment and how we plan for a safe birth.",
-      category: "Your health in pregnancy", source: "NHS Lothian", file: "leaflets/bmi-and-pregnancy.pdf", review: "May 2025" },
+      category: "Your health in pregnancy", source: "NHS Lothian", file: "bmi-and-pregnancy.pdf", review: "May 2025" },
     { id: "lmwh",  title: "Blood thinning injections in pregnancy",  desc: "How the timing of your injections affects pain relief and anaesthetic choices.",
-      category: "Your health in pregnancy", source: "NHS Lothian", file: "leaflets/blood-thinning-injections.pdf" },
+      category: "Your health in pregnancy", source: "NHS Lothian", file: "blood-thinning-injections.pdf" },
     { id: "back",  title: "Back problems and pain relief in labour", desc: "Pain relief and anaesthetic options if you have back problems.",
-      category: "Your health in pregnancy", source: "NHS Lothian", file: "leaflets/back-problems.pdf", review: "Jun 2021" },
+      category: "Your health in pregnancy", source: "NHS Lothian", file: "back-problems.pdf", review: "Jun 2021" },
 
     // Blood and bleeding
     { id: "cell",  title: "Cell salvage during caesarean birth",     desc: "How your own blood can be collected, cleaned and given back to you during a caesarean.",
-      category: "Blood and bleeding", source: "NHS Lothian", file: "leaflets/cell-salvage.pdf", review: "Oct 2021" },
+      category: "Blood and bleeding", source: "NHS Lothian", file: "cell-salvage.pdf", review: "Oct 2021" },
     { id: "blood", title: "Choices if you may refuse blood products", desc: "Treatments and options available if you do not wish to receive blood.",
-      category: "Blood and bleeding", source: "NHS Lothian", file: "leaflets/refusing-blood-products.pdf" },
+      category: "Blood and bleeding", source: "NHS Lothian", file: "refusing-blood-products.pdf" },
 
     // Emotional wellbeing
     { id: "mnpi",  title: "Maternity and Neonatal Psychological Interventions service", desc: "Support for emotional difficulties linked to pregnancy, birth or a baby's neonatal stay.",
-      category: "Emotional wellbeing", source: "NHS Lothian", file: "leaflets/psychological-support-mnpi.pdf", review: "Apr 2025" }
+      category: "Emotional wellbeing", source: "NHS Lothian", file: "psychological-support-mnpi.pdf", review: "Apr 2025" }
   ],
 
   // One-click presets on the clinic page (use leaflet ids). Edit to suit your clinic.
