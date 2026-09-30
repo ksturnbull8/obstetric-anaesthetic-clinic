@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex, nofollow">
   <title>Obstetric Anaesthetic Clinic – Leaflets</title>
   <link rel="stylesheet" href="style.css">
   <script src="qrcode.js"></script>
@@ -17,7 +17,15 @@
   </header>
 
   <main>
-    <div id="picker">
+    <form id="lock" class="card lock" autocomplete="off">
+      <h2>Staff only</h2>
+      <p class="note">Enter the clinic password to choose leaflets for a patient.</p>
+      <input type="password" id="pw" aria-label="Clinic password" placeholder="Password">
+      <button type="submit">Unlock</button>
+      <p class="error" id="pw-error" hidden>That password isn't right. Check it and try again.</p>
+    </form>
+
+    <div id="picker" hidden>
       <div class="toolbar">
         <input type="search" id="search" placeholder="Search leaflets…" aria-label="Search leaflets">
       </div>
@@ -48,6 +56,31 @@
 
   <script src="leaflets.js"></script>
   <script>
+    // Password gate. Stops casual visitors, not a determined one. The password is stored scrambled (SHA-256),
+    // ignoring capitals. To change it, replace PW_HASH with the SHA-256 of the new password in lowercase.
+    const PW_HASH = '42a895e31309a2a85c7701ca7c13bb1b004a3ef6bee80c1799d8aae41e88fbfd';
+    const KEY = 'oac-unlocked';
+    async function sha256(t) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    function unlock() {
+      document.getElementById('lock').hidden = true;
+      document.getElementById('picker').hidden = false;
+    }
+    try { if (localStorage.getItem(KEY) === PW_HASH) unlock(); } catch (e) {}
+    document.getElementById('lock').addEventListener('submit', async e => {
+      e.preventDefault();
+      const h = await sha256(document.getElementById('pw').value.trim().toLowerCase());
+      if (h === PW_HASH) {
+        try { localStorage.setItem(KEY, PW_HASH); } catch (e) {}
+        unlock();
+      } else {
+        document.getElementById('pw-error').hidden = false;
+        document.getElementById('pw').select();
+      }
+    });
+
     const cfg = window.LEAFLET_CONFIG;
     if (cfg.logo) { const lg = document.getElementById('logo'); lg.src = cfg.logo; lg.alt = 'Logo'; lg.hidden = false; }
     document.getElementById('clinic-name').textContent = cfg.clinicName;
