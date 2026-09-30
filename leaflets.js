@@ -22,7 +22,7 @@ window.LEAFLET_CONFIG = {
 
   // Header logo shown on both pages. Put the official file in the /img folder and add its path,
   // e.g. "nhs-lothian-logo.png". Leave as "" for no logo.
-  logo: "nhs-lothian-logo.svg",
+  logo: "NHS-Lothian-Logo.svg",
 
   // Source badges shown on the right of each leaflet on the clinic page.
   // style "a" = blue, "b" = purple. To show an official emblem instead of the text badge,
