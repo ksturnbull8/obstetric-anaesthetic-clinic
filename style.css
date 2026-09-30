@@ -80,6 +80,15 @@ button.secondary { background: var(--card); color: var(--accent); }
 button:disabled { opacity: .4; cursor: default; }
 
 /* Clinic page */
+[hidden] { display: none !important; }
+.lock { max-width: 420px; margin: 40px auto; display: grid; gap: 12px; }
+.lock h2 { margin: 0; }
+.lock .note { margin: 0; }
+.lock input {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--card); color: var(--text);
+}
+.error { margin: 0; color: #b3261e; font-size: .9rem; }
 .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
 .toolbar input[type=search] {
   flex: 1 1 220px; font: inherit; padding: 10px 12px;
