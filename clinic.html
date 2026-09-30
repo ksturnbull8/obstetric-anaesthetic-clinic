@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Obstetric Anaesthetic Clinic – Leaflets</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="qrcode.js"></script>
+</head>
+<body>
+  <header>
+    <div class="inner"><div>
+    <h1 id="clinic-name">Obstetric Anaesthetic Clinic</h1>
+    <p>Tick the leaflets for this patient, then show them the QR code</p>
+    </div><img class="logo" id="logo" alt="" hidden></div>
+  </header>
+
+  <main>
+    <div id="picker">
+      <div class="toolbar">
+        <input type="search" id="search" placeholder="Search leaflets…" aria-label="Search leaflets">
+      </div>
+      <div class="bundles" id="bundles"></div>
+      <div id="groups"></div>
+
+      <div class="sticky">
+        <span id="count">0 selected</span>
+        <span>
+          <button class="secondary" id="clear">Clear</button>
+          <button id="generate" disabled>Generate QR code</button>
+        </span>
+      </div>
+    </div>
+
+    <section id="result" class="result" hidden>
+      <h2>Ask the patient to scan this with their phone camera</h2>
+      <div id="qr"></div>
+      <p id="chosen-summary" class="note"></p>
+      <p class="link-box" id="link"></p>
+      <p class="no-print">
+        <button class="secondary" id="copy">Copy link</button>
+        <button class="secondary" id="print">Print for patient</button>
+        <button id="next">Next patient</button>
+      </p>
+    </section>
+  </main>
+
+  <script src="leaflets.js"></script>
+  <script>
+    const cfg = window.LEAFLET_CONFIG;
+    if (cfg.logo) { const lg = document.getElementById('logo'); lg.src = cfg.logo; lg.alt = 'Logo'; lg.hidden = false; }
+    document.getElementById('clinic-name').textContent = cfg.clinicName;
+    const byId = Object.fromEntries(cfg.leaflets.map(l => [l.id, l]));
+    const selected = new Set();
+
+    // Build grouped checklist
+    const groups = document.getElementById('groups');
+    cfg.categories.forEach(cat => {
+      const items = cfg.leaflets.filter(l => l.category === cat);
+      if (!items.length) return;
+      const h = document.createElement('h2');
+      h.textContent = cat;
+      const box = document.createElement('div');
+      box.className = 'card';
+      items.forEach(l => {
+        const row = document.createElement('label');
+        row.className = 'leaflet-row';
+        row.dataset.search = (l.title + ' ' + l.source + ' ' + cat).toLowerCase();
+        row.innerHTML = `<input type="checkbox" value="${l.id}"><span class="text"><span class="title"></span><br><span class="meta"></span></span><span class="badge"></span>`;
+        row.querySelector('.title').textContent = l.title;
+        row.querySelector('.meta').textContent = (l.file ? 'PDF' : 'Web page') +
+          (l.review ? ` · review due ${l.review}` : '');
+        const src = (cfg.sources || {})[l.source] || {};
+        const badge = row.querySelector('.badge');
+        badge.classList.add(src.style || 'a');
+        badge.title = l.source;
+        if (src.logo) {
+          const img = document.createElement('img');
+          img.src = src.logo; img.alt = l.source;
+          badge.classList.add('has-logo');
+          badge.appendChild(img);
+        } else {
+          badge.textContent = l.source;
+        }
+        row.querySelector('input').addEventListener('change', e => {
+          e.target.checked ? selected.add(l.id) : selected.delete(l.id);
+          update();
+        });
+        box.appendChild(row);
+      });
+      const section = document.createElement('section');
+      section.append(h, box);
+      groups.appendChild(section);
+    });
+
+    // Bundles
+    const bundles = document.getElementById('bundles');
+    (cfg.bundles || []).forEach(b => {
+      const btn = document.createElement('button');
+      btn.className = 'secondary';
+      btn.textContent = '+ ' + b.name;
+      btn.onclick = () => { b.ids.forEach(id => byId[id] && selected.add(id)); syncBoxes(); };
+      bundles.appendChild(btn);
+    });
+
+    // Search
+    document.getElementById('search').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('.leaflet-row').forEach(r => {
+        r.style.display = r.dataset.search.includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('#groups section').forEach(s => {
+        const any = [...s.querySelectorAll('.leaflet-row')].some(r => r.style.display !== 'none');
+        s.style.display = any ? '' : 'none';
+      });
+    });
+
+    function syncBoxes() {
+      document.querySelectorAll('.leaflet-row input').forEach(i => i.checked = selected.has(i.value));
+      update();
+    }
+    function update() {
+      document.getElementById('count').textContent = `${selected.size} selected`;
+      document.getElementById('generate').disabled = selected.size === 0;
+    }
+
+    // Generate link + QR
+    let link = '';
+    document.getElementById('generate').onclick = () => {
+      const ids = cfg.leaflets.map(l => l.id).filter(id => selected.has(id)); // stable order
+      const url = new URL('index.html', location.href);
+      url.search = '?l=' + ids.join(',');
+      link = url.toString();
+
+      const qr = document.getElementById('qr');
+      const code = qrcode(0, 'M');
+      code.addData(link);
+      code.make();
+      qr.innerHTML = code.createSvgTag({ cellSize: 6, margin: 2, scalable: false });
+
+      document.getElementById('link').textContent = link;
+      document.getElementById('chosen-summary').textContent =
+        ids.map(id => byId[id].title).join(' · ');
+      document.getElementById('picker').hidden = true;
+      document.getElementById('result').hidden = false;
+      window.scrollTo(0, 0);
+    };
+
+    document.getElementById('copy').onclick = async () => {
+      try { await navigator.clipboard.writeText(link); document.getElementById('copy').textContent = 'Copied'; }
+      catch { prompt('Copy this link:', link); }
+    };
+    document.getElementById('clear').onclick = () => { selected.clear(); syncBoxes(); };
+    document.getElementById('print').onclick = () => window.print();
+    document.getElementById('next').onclick = () => {
+      selected.clear(); syncBoxes();
+      document.getElementById('search').value = '';
+      document.getElementById('search').dispatchEvent(new Event('input'));
+      document.getElementById('copy').textContent = 'Copy link';
+      document.getElementById('result').hidden = true;
+      document.getElementById('picker').hidden = false;
+    };
+  </script>
+</body>
+</html>
