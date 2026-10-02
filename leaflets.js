@@ -85,8 +85,10 @@ window.LEAFLET_CONFIG = {
     // Your health in pregnancy
     { id: "bmi",   title: "Body mass index (BMI) and pregnancy",     desc: "Why you may be offered an anaesthetic appointment and how we plan for a safe birth.",
       category: "Your health in pregnancy", source: "NHS Lothian", file: "bmi-and-pregnancy.pdf", review: "May 2025" },
-    { id: "lmwh",  title: "Blood thinning injections in pregnancy",  desc: "How the timing of your injections affects pain relief and anaesthetic choices.",
+    { id: "lmwh",  title: "Blood thinning injections in pregnancy (12 hours)", desc: "How the timing of your injections affects pain relief and anaesthetic choices, if you have been advised to leave 12 hours after your last dose.",
       category: "Your health in pregnancy", source: "NHS Lothian", file: "blood-thinning-injections.pdf" },
+    { id: "lmwh24", title: "Blood thinning injections in pregnancy (24 hours)", desc: "How the timing of your injections affects pain relief and anaesthetic choices, if you have been advised to leave 24 hours after your last dose.",
+      category: "Your health in pregnancy", source: "NHS Lothian", file: "blood-thinning-injections-24hr.pdf" },
     { id: "back",  title: "Back problems and pain relief in labour", desc: "Pain relief and anaesthetic options if you have back problems.",
       category: "Your health in pregnancy", source: "NHS Lothian", file: "back-problems.pdf", review: "Jun 2021" },
 
