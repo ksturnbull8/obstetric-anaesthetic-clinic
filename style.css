@@ -63,6 +63,10 @@ a.card:hover, a.card:focus { border-color: var(--accent); outline: none; }
 .card .title { font-weight: 600; color: var(--accent); }
 .card .meta { color: var(--muted); font-size: .9rem; }
 
+.save { display: grid; gap: 10px; margin-top: 8px; background: var(--accent-soft); border-color: transparent; }
+.save h2 { margin: 0; }
+.save p { margin: 0; }
+.save button { justify-self: start; }
 .featured a.card { background: var(--accent-soft); border-color: transparent; }
 
 .note { color: var(--muted); font-size: .9rem; }

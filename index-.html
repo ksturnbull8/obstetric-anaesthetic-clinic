@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Your Pregnancy Information</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="apple-touch-icon" href="home-icon.png">
+  <link rel="icon" type="image/png" href="home-icon.png">
+  <meta name="apple-mobile-web-app-title" content="My leaflets">
+</head>
+<body>
+  <header>
+    <div class="inner"><div>
+    <h1 id="site-name">Your Pregnancy Information</h1>
+    <p>Leaflets chosen for you by your clinic team</p>
+    </div><img class="logo" id="logo" alt="" hidden></div>
+  </header>
+
+  <main>
+    <section id="chosen">
+      <h2>Your leaflets</h2>
+      <div id="leaflet-list"></div>
+    </section>
+
+    <section id="save" class="card save" hidden>
+      <h2>Keep these leaflets</h2>
+      <p id="save-steps"></p>
+      <button type="button" id="share">Send this page to myself</button>
+      <p class="note" id="share-done" hidden>Link copied. Paste it into a text or email to yourself.</p>
+    </section>
+
+    <section class="featured">
+      <h2>Useful websites</h2>
+      <div id="featured-list"></div>
+    </section>
+
+    <p class="note">
+      This page does not contain any personal information about you.
+    </p>
+    <p class="note">
+      If you have questions about anything you read, speak to your midwife or clinical team.
+    </p>
+  </main>
+
+  <script src="leaflets.js"></script>
+  <script>
+    const cfg = window.LEAFLET_CONFIG;
+    if (cfg.logo) { const lg = document.getElementById('logo'); lg.src = cfg.logo; lg.alt = 'Logo'; lg.hidden = false; }
+    document.getElementById('site-name').textContent = cfg.siteName;
+    document.title = cfg.siteName;
+
+    const byId = Object.fromEntries(cfg.leaflets.map(l => [l.id, l]));
+    const SAVE_KEY = 'my-leaflets';
+    let ids = (new URLSearchParams(location.search).get('l') || '')
+      .split(',').map(s => s.trim()).filter(id => byId[id]);
+
+    // Remember the leaflets on this phone, so opening the site again shows them even without the full link
+    if (ids.length) {
+      try { localStorage.setItem(SAVE_KEY, ids.join(',')); } catch (e) {}
+    } else {
+      try {
+        const saved = (localStorage.getItem(SAVE_KEY) || '').split(',').filter(id => byId[id]);
+        if (saved.length) {
+          ids = saved;
+          history.replaceState(null, '', '?l=' + ids.join(','));
+        }
+      } catch (e) {}
+    }
+
+    const list = document.getElementById('leaflet-list');
+
+    function card(href, title, meta, desc) {
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      const t = document.createElement('div');
+      t.className = 'title';
+      t.textContent = title;
+      a.appendChild(t);
+      if (desc) {
+        const d = document.createElement('div');
+        d.textContent = desc;
+        a.appendChild(d);
+      }
+      if (meta) {
+        const m = document.createElement('div');
+        m.className = 'meta';
+        m.textContent = meta;
+        a.appendChild(m);
+      }
+      return a;
+    }
+
+    if (ids.length === 0) {
+      list.innerHTML = '<p class="note">No leaflets were selected. Please ask your clinic team to scan the code again, or use the websites below.</p>';
+    } else {
+      // Keep the category order from the config
+      const ordered = [...new Set(ids)].sort((a, b) =>
+        cfg.categories.indexOf(byId[a].category) - cfg.categories.indexOf(byId[b].category));
+      ordered.forEach(id => {
+        const l = byId[id];
+        const kind = l.file ? 'PDF' : 'Web page';
+        list.appendChild(card(l.file || l.url, l.title, `${l.source} · ${kind}`, l.desc));
+      });
+    }
+
+    // "Keep these leaflets" box with steps for the patient's own phone
+    if (ids.length) {
+      const ua = navigator.userAgent;
+      const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isAndroid = /Android/.test(ua);
+      const steps = document.getElementById('save-steps');
+      if (isIOS) {
+        steps.innerHTML = 'To keep this page on your phone, tap the <strong>Share</strong> button (the square with an arrow) at the bottom of the screen, then tap <strong>Add to Home Screen</strong>.';
+      } else if (isAndroid) {
+        steps.innerHTML = 'To keep this page on your phone, tap the <strong>menu</strong> (three dots) at the top right, then tap <strong>Add to Home screen</strong>.';
+      } else {
+        steps.innerHTML = 'To keep this page, bookmark it in your web browser.';
+      }
+      document.getElementById('save').hidden = false;
+      document.getElementById('share').addEventListener('click', async () => {
+        const url = location.href;
+        if (navigator.share) {
+          try { await navigator.share({ title: 'My pregnancy leaflets', text: 'Leaflets from my NHS Lothian clinic appointment', url }); return; }
+          catch (e) { if (e.name === 'AbortError') return; }
+        }
+        try { await navigator.clipboard.writeText(url); document.getElementById('share-done').hidden = false; }
+        catch (e) { window.prompt('Copy this link and send it to yourself:', url); }
+      });
+    }
+
+    const featured = document.getElementById('featured-list');
+    cfg.featured.forEach(f => featured.appendChild(card(f.url, f.title, f.description)));
+  </script>
+</body>
+</html>
