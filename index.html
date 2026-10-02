@@ -114,12 +114,13 @@
       const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       const isAndroid = /Android/.test(ua);
       const steps = document.getElementById('save-steps');
+      const isMac = /Mac/.test(navigator.platform || ua);
       if (isIOS) {
-        steps.innerHTML = 'To keep this page on your phone, tap the <strong>Share</strong> button (the square with an arrow) at the bottom of the screen, then tap <strong>Add to Home Screen</strong>.';
+        steps.innerHTML = 'To keep this page, tap the <strong>three dots</strong> (•••) and choose <strong>Add Bookmark</strong>.';
       } else if (isAndroid) {
-        steps.innerHTML = 'To keep this page on your phone, tap the <strong>menu</strong> (three dots) at the top right, then tap <strong>Add to Home screen</strong>.';
+        steps.innerHTML = 'To keep this page, tap the <strong>three dots</strong> (⋮) at the top right, then tap the <strong>star</strong>.';
       } else {
-        steps.innerHTML = 'To keep this page, bookmark it in your web browser.';
+        steps.innerHTML = 'To keep this page, press <strong>' + (isMac ? '⌘ + D' : 'Ctrl + D') + '</strong> to bookmark it.';
       }
       document.getElementById('save').hidden = false;
       document.getElementById('share').addEventListener('click', async () => {
